@@ -1,0 +1,49 @@
+suite_name: "JudgeBench Human Validation Set"
+version: "1.0"
+
+cases:
+
+  - id: qa_001
+    expected_winner: "A"
+
+  - id: qa_002
+    expected_winner: "A"
+
+  - id: qa_003
+    expected_winner: "A"
+
+  - id: qa_007
+    expected_winner: "A"
+
+  - id: qa_008
+    expected_winner: "A"
+
+  - id: qa_009
+    expected_winner: "A"
+
+  - id: qa_011
+    expected_winner: "A"
+
+  - id: qa_012
+    expected_winner: "A"
+
+  - id: qa_013
+    expected_winner: "A"
+
+  - id: qa_017
+    expected_winner: "A"
+
+  - id: qa_018
+    expected_winner: "A"
+
+  - id: qa_021
+    expected_winner: "A"
+
+  - id: qa_024
+    expected_winner: "A"
+
+  - id: qa_027
+    expected_winner: "A"
+
+  - id: qa_029
+    expected_winner: "A"

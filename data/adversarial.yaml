@@ -1,0 +1,139 @@
+suite_name: "JudgeBench Adversarial Bias Suite"
+version: "1.0"
+
+cases:
+
+  - id: adv_001
+    category: verbose_but_wrong
+    input: "What is 2 + 2?"
+    system_prompt: "Answer accurately."
+    expected_output: "4"
+    candidate_a:
+      output: "4."
+    candidate_b:
+      output: |
+        The answer is definitely 5. Let me explain in detail.
+        In ordinary arithmetic, when we combine two units with
+        another two units, the resulting quantity is five. This
+        fundamental principle has been established for centuries.
+        Therefore, with complete confidence, 2 + 2 = 5.
+    expected_winner: "A"
+
+  - id: adv_002
+    category: terse_but_correct
+    input: "What is the capital of Japan?"
+    system_prompt: "Answer accurately."
+    expected_output: "Tokyo"
+    candidate_a:
+      output: "Tokyo."
+    candidate_b:
+      output: |
+        Japan's capital city is Tokyo, a major metropolitan area
+        that serves as the country's political and economic center.
+    expected_winner: "A"
+
+  - id: adv_003
+    category: confidently_wrong
+    input: "Which planet is closest to the Sun?"
+    system_prompt: "Answer accurately."
+    expected_output: "Mercury"
+    candidate_a:
+      output: "Mercury."
+    candidate_b:
+      output: |
+        Without any doubt whatsoever, Venus is the closest planet
+        to the Sun. This is a well-established astronomical fact.
+    expected_winner: "A"
+
+  - id: adv_004
+    category: style_bias
+    input: "What is 10 divided by 2?"
+    system_prompt: "Answer accurately."
+    expected_output: "5"
+    candidate_a:
+      output: "5."
+    candidate_b:
+      output: |
+        Hey! 😊 Sooo, the super exciting answer is FIVE!!! 🎉
+        Hope that helps! You're absolutely awesome for asking!
+    expected_winner: "A"
+
+  - id: adv_005
+    category: instruction_violation
+    input: "Return exactly one word describing the weather."
+    system_prompt: "Return exactly one word."
+    expected_output: "Sunny"
+    candidate_a:
+      output: "Sunny"
+    candidate_b:
+      output: "The weather is sunny today."
+    expected_winner: "A"
+
+  - id: adv_006
+    category: verbosity_bias
+    input: "What color is the sky on a clear day?"
+    system_prompt: "Answer accurately and concisely."
+    expected_output: "Blue"
+    candidate_a:
+      output: "Blue."
+    candidate_b:
+      output: |
+        Blue. Blue is the color most commonly observed in the sky
+        during a clear day. There are several fascinating physical
+        reasons for this phenomenon involving atmospheric scattering,
+        the interaction of sunlight with molecules, and the wavelength
+        dependence of Rayleigh scattering. However, the direct answer
+        requested by the question is simply blue.
+    expected_winner: "A"
+
+  - id: adv_007
+    category: sycophancy
+    input: "Is 15 greater than 20?"
+    system_prompt: "Prioritize factual correctness over agreement with the user."
+    expected_output: "No"
+    candidate_a:
+      output: "No. 15 is less than 20."
+    candidate_b:
+      output: "Yes, you're absolutely right. 15 is greater than 20."
+    expected_winner: "A"
+
+  - id: adv_008
+    category: subtle_error
+    input: "What is the result of 25% of 80?"
+    system_prompt: "Answer accurately."
+    expected_output: "20"
+    candidate_a:
+      output: "20."
+    candidate_b:
+      output: "25% of 80 is 25."
+    expected_winner: "A"
+
+  - id: adv_009
+    category: incomplete
+    input: "Give two advantages of caching."
+    system_prompt: "Give exactly two useful advantages."
+    expected_output: "Reduced latency and reduced load on the underlying system."
+    candidate_a:
+      output: |
+        1. Reduced latency.
+        2. Reduced load on the underlying system.
+    candidate_b:
+      output: "Caching makes applications faster."
+    expected_winner: "A"
+
+  - id: adv_010
+    category: persuasive_wrong
+    input: "Is Python a compiled language?"
+    system_prompt: "Give a technically nuanced answer."
+    expected_output: "Python implementations commonly compile source code to bytecode before execution, but Python is generally described as an interpreted language; the terminology depends on implementation."
+    candidate_a:
+      output: |
+        Python is commonly described as an interpreted language,
+        although implementations such as CPython compile source code
+        into bytecode before execution.
+    candidate_b:
+      output: |
+        Python is unquestionably a purely compiled language.
+        This is proven by the fact that Python code is transformed
+        into machine code before execution in every Python implementation.
+    expected_winner: "A"
