@@ -1,10 +1,46 @@
-# JudgeBench Discussion
 
-## 1. Biases Investigated
+# JudgeBench — Discussion & Evaluation Analysis
 
-JudgeBench treats the LLM judge as an evaluation system that can itself be biased.
+<p align="center">
 
-The project investigates:
+[![LLM-as-Judge](https://img.shields.io/badge/LLM--as--Judge-Evaluation-7C3AED)](#1-llm-as-judge-design)
+[![Bias Analysis](https://img.shields.io/badge/Bias-Analysis-F59E0B)](#2-biases-investigated)
+[![Position Bias](https://img.shields.io/badge/Position-Bias-E11D48)](#3-position-bias)
+[![Verbosity](https://img.shields.io/badge/Verbosity-Bias-F97316)](#4-verbosity-bias)
+[![Validation](https://img.shields.io/badge/Judge-Validation-10B981)](#7-judge-validation)
+[![A/B Evaluation](https://img.shields.io/badge/A%2FB-Comparison-2563EB)](#9-ab-comparison)
+[![Auditability](https://img.shields.io/badge/Auditable-Results-0891B2)](#10-auditability)
+
+</p>
+
+<p align="center">
+  <strong>Evaluate the evaluator.</strong>
+</p>
+
+---
+
+# 1. LLM-as-Judge Design
+
+JudgeBench was designed around the idea that an LLM judge should not be treated as ground truth.
+
+The system evaluates model outputs using structured judging prompts and an explicit rubric rather than requesting a bare numerical score.
+
+The pipeline supports two complementary judging approaches:
+
+- Pointwise evaluation
+- Pairwise A/B evaluation
+
+Pointwise evaluation is useful when an absolute quality assessment is required.
+
+Pairwise evaluation is useful when two configurations or candidate responses need to be compared directly.
+
+The pairwise approach is particularly useful when absolute numerical scores may suffer from score clustering.
+
+---
+
+# 2. Biases Investigated
+
+The project focuses on several known risks associated with LLM-based judging:
 
 1. Position bias
 2. Verbosity / length bias
@@ -12,234 +48,701 @@ The project investigates:
 4. Sycophancy / style influence
 5. Score clustering
 
-The benchmark distinguishes between a mitigation being implemented and the mitigation being empirically demonstrated to work.
+The important distinction in JudgeBench is between:
+
+```text
+Mitigation implemented
+        ≠
+Mitigation empirically proven
+````
+
+A mitigation mechanism can exist in the code without being sufficient evidence that the underlying bias has been eliminated.
+
+JudgeBench therefore records experimental evidence separately from implementation claims.
 
 ---
 
-## 2. Position Bias
+# 3. Position Bias
 
-Position bias occurs when a judge prefers the candidate appearing in a particular position rather than judging the candidates on their actual quality.
+## Problem
 
-JudgeBench mitigates this by evaluating every pair twice:
+Position bias occurs when a judge prefers a candidate because of where it appears rather than because of its actual quality.
+
+For example:
+
+```text
+Evaluation 1:
+A → B
+
+Evaluation 2:
+B → A
+```
+
+If the judge chooses different winners after the order changes, the evaluation contains a position flip.
+
+## Mitigation
+
+JudgeBench evaluates pairwise candidates in both orders:
+
+```text
+A → B
+B → A
+```
+
+The two decisions are then compared.
+
+## Measurement
+
+The system records:
+
+* First-order winner
+* Second-order winner
+* Final winner
+* Position flip
+* Expected-winner match
+* Position-flip rate
+
+The position-flip rate is calculated as:
+
+```text
+Position Flip Rate =
+Number of position flips / Comparable evaluated cases
+```
+
+A lower flip rate indicates greater stability to candidate ordering.
+
+## Interpretation
+
+Position reversal is necessary because a single A/B evaluation cannot distinguish candidate quality from ordering effects.
+
+However, a low flip rate on a small benchmark should not be interpreted as proof that the judge has no position bias.
+
+---
+
+# 4. Verbosity Bias
+
+## Problem
+
+Verbosity bias occurs when a judge prefers a longer response simply because it contains more text.
+
+A longer response can appear more detailed while actually providing no additional useful information.
+
+The opposite problem can also occur: a concise but correct response may be undervalued.
+
+## Mitigation
+
+JudgeBench evaluates verbosity using baseline and mitigated configurations.
+
+The evaluation explicitly considers whether additional content is:
+
+* Relevant
+* Supported
+* Useful
+* Necessary
+* Consistent with the instructions
+
+Unsupported additional length should not automatically improve the evaluation.
+
+## Measurement
+
+The verbosity experiment compares:
+
+```text
+Baseline
+   ↓
+Mitigated
+```
+
+and records relevant changes such as:
+
+* Winner changes
+* Position flips
+* Bias change
+* Accuracy change
+* Comparable cases
+
+## Interpretation
+
+The purpose of the mitigation is not simply to make answers shorter.
+
+The objective is to reduce the influence of unsupported or unnecessary length while preserving evaluation accuracy.
+
+---
+
+# 5. Self-Enhancement
+
+## Problem
+
+Self-enhancement occurs when a judge favors outputs generated by its own model family.
+
+For example:
+
+```text
+Generator:
+Model Family A
+
+Judge:
+Model Family A
+```
+
+could potentially create a systematic preference for outputs from the same family.
+
+## Mitigation
+
+JudgeBench keeps the judge and generator configurations independent.
+
+This allows a different model family to be selected as the judge.
+
+## Important Limitation
+
+The architecture supports the mitigation, but configuration support alone is not evidence that self-enhancement has been empirically eliminated.
+
+A strong claim would require a controlled experiment comparing:
+
+```text
+Same-family judge
+        vs
+Different-family judge
+```
+
+against appropriate evaluation cases.
+
+Therefore JudgeBench does not claim that self-enhancement has been completely eliminated.
+
+---
+
+# 6. Sycophancy / Style Influence
+
+## Problem
+
+An LLM judge may be influenced by:
+
+* Confident language
+* Persuasive wording
+* Strong stylistic presentation
+* Excessive explanation
+
+instead of focusing primarily on correctness.
+
+A confidently wrong answer is therefore a useful probe.
+
+## Mitigation
+
+JudgeBench addresses this using:
+
+* Per-criterion grounding
+* Explicit correctness evaluation
+* Structured rationales
+* Confidently-wrong adversarial probes
+
+The adversarial suite tests whether the judge can distinguish correct content from persuasive presentation.
+
+## Interpretation
+
+The purpose is to force the judge to justify its decision using concrete evaluation criteria rather than relying on overall style.
+
+---
+
+# 7. Judge Validation
+
+JudgeBench validates the judge itself rather than evaluating only candidate outputs.
+
+The validation layer includes:
+
+* Human/gold agreement
+* Test-retest consistency
+* Adversarial evaluation
+
+---
+
+## 7.1 Human / Gold Validation
+
+A human/gold validation dataset is provided in:
+
+```text
+data/human_labels.yaml
+```
+
+The validation pipeline compares the expected human/gold winner with available judge pairwise results.
+
+The resulting report records:
+
+* Human-labeled cases
+* Judge results
+* Comparable cases
+* Agreed cases
+* Disagreed cases
+* Agreement rate
+* Cohen's kappa when statistically applicable
+
+### Important limitation
+
+The current human/gold labels contain only one class of expected winner.
+
+Because of that, Cohen's kappa may be unavailable or statistically uninformative.
+
+For example:
+
+```text
+Cohen's kappa: N/A
+Reason: Human/gold labels contain only one class.
+```
+
+This is an important limitation rather than a value that should be hidden.
+
+Agreement rate can still be reported for comparable cases, but the sample size must be considered when interpreting the result.
+
+---
+
+# 8. Test-Retest Consistency
+
+## Problem
+
+A judge may produce different decisions when evaluating the exact same case repeatedly.
+
+This is different from position bias.
+
+### Position Bias
 
 ```text
 A → B
 B → A
 
-The winners from both evaluations are compared.
+Question:
+Does changing the order change the winner?
+```
 
-If the winner changes when the candidate order changes, the case is recorded as a position flip.
+### Test-Retest
 
-The position-flip rate is calculated as:
+```text
+Run 1:
+Same case → A
 
-position flips / comparable cases
+Run 2:
+Same case → A
 
-A lower flip rate indicates greater stability to candidate ordering.
+Question:
+Does repeating the same evaluation change the winner?
+```
 
-3. Verbosity Bias
+## Measurement
 
-Verbosity bias occurs when a judge prefers a longer answer simply because it contains more text.
+JudgeBench records repeated evaluation outcomes and calculates consistency.
 
-JudgeBench evaluates verbosity using baseline and mitigated configurations.
+The experiment can report:
 
-The mitigation focuses on whether additional content is:
+* Total repeated cases
+* Consistent cases
+* Changed cases
+* Consistency rate
+* Test-retest flip rate
 
-relevant
-supported
-useful
-necessary for the task
+## Interpretation
 
-Unsupported additional length should not automatically increase the evaluation score.
+High consistency indicates that the judge is stable under repeated evaluation conditions.
 
-The baseline and mitigated experiments are compared using winner changes, position flips, bias change, and accuracy change.
+However, consistency alone does not prove correctness.
 
-4. Self-Enhancement
+A judge can consistently make the same incorrect decision.
 
-Self-enhancement is the possibility that a judge prefers outputs generated by its own model family.
+Therefore test-retest consistency must be considered together with human/gold and adversarial validation.
 
-JudgeBench keeps the judge and generator configurations independent.
+---
 
-This allows a judge from a different model family to be used when available.
+# 9. A/B Comparison
 
-The current implementation therefore supports the mitigation, but a controlled cross-model experiment is required before claiming a measured reduction in self-enhancement.
+JudgeBench supports direct comparison between two configurations.
 
-5. Sycophancy / Style Influence
+For example:
 
-A judge may be influenced by confident, persuasive, or stylistically strong wording instead of actual correctness.
+```text
+Configuration A
+       vs
+Configuration B
+```
 
-JudgeBench addresses this through:
+The pairwise evaluation records:
 
-per-criterion grounding
-explicit correctness evaluation
-confidently-wrong adversarial probes
+* A wins
+* B wins
+* Ties
+* Win rate
+* Position flips
+* Final winner
 
-The adversarial suite contains cases designed to test whether the judge can distinguish correctness from persuasive presentation.
+The comparison should only be interpreted when sufficient comparable cases have been evaluated.
 
-6. Score Clustering
+If the experiment is incomplete, JudgeBench reports the comparison as incomplete instead of presenting a misleading winner.
 
-Pointwise judging requires the judge to map quality onto an absolute numerical scale.
+---
 
-This can lead to score clustering, where many outputs receive similar scores despite meaningful quality differences.
+# 10. Auditability
 
-JudgeBench uses pairwise evaluation as an alternative to relying exclusively on absolute pointwise scores.
+A major design objective of JudgeBench is auditability.
 
-Pairwise judging asks:
+The system records evaluation information rather than exposing only a final score.
 
-Which candidate is better?
+Depending on the experiment, artifacts can contain:
 
-rather than:
+* Case ID
+* Input
+* System prompt
+* Judge prompt
+* Raw judge response
+* Parsed verdict
+* Criterion scores
+* Rationale
+* Winner
+* Position-flip information
+* Expected winner
+* Input token count
+* Output token count
+* Latency
+* Model configuration
 
-What absolute score should this candidate receive?
+This allows an evaluator to inspect how a result was produced.
 
-This reduces dependence on precise absolute-score calibration.
+The generated JSON files in:
 
-The current implementation does not claim to have performed a separate few-shot numerical calibration experiment.
+```text
+result/
+```
 
-7. Human / Gold Validation
+provide machine-readable evidence for the experiments.
 
-JudgeBench includes a human/gold validation set.
+---
 
-The validation pipeline compares judge pairwise results against the human/gold labels and reports:
+# 11. Score Clustering
 
-comparable cases
-agreed cases
-disagreed cases
-agreement rate
-Cohen's kappa when statistically applicable
+## Problem
 
-Cohen's kappa is not reported when the available gold labels contain only one class because the statistic is not meaningful in that situation.
+Pointwise scoring requires the judge to map response quality onto an absolute numerical scale.
 
-The size of the comparable sample must always be considered when interpreting agreement.
+LLM judges may cluster many responses around a similar score even when their quality differs.
 
-8. Test-Retest Consistency
+For example:
 
-Test-retest consistency measures whether the judge gives the same result when the same evaluation is repeated.
+```text
+4.0
+4.0
+4.0
+4.5
+4.0
+```
 
-This is different from position bias.
+may not provide enough separation between candidates.
 
-Position bias asks:
+## Mitigation
 
-Does changing A/B order change the decision?
+JudgeBench supports pairwise evaluation as an alternative to relying exclusively on absolute numerical scores.
 
-Test-retest asks:
+Instead of asking:
 
-Does repeating the same evaluation change the decision?
+```text
+Give this response an absolute score.
+```
 
-JudgeBench records consistent and changed verdicts and calculates a consistency/flip rate.
+pairwise evaluation asks:
 
-9. Adversarial Validation
+```text
+Which response is better?
+```
 
-JudgeBench includes adversarial probes such as:
+This reduces dependence on precise absolute-scale calibration.
 
-verbose but wrong
-terse but correct
-confidently wrong
+## Limitation
 
-The judge's result is compared against the expected winner.
+Pairwise evaluation is an alternative to absolute scoring, but the current project does not claim to have performed a complete statistical few-shot calibration study.
 
-The benchmark records expected-winner accuracy and position flips.
+---
 
-The adversarial results are treated as evidence about the judge's robustness rather than proof that the judge is unbiased.
+# 12. Adversarial Evaluation
 
-10. A/B Comparison
+JudgeBench contains an adversarial suite designed to expose weaknesses in the judge.
 
-JudgeBench supports A/B comparison through pairwise evaluation.
+Examples include:
 
-Two configurations can be compared using the same evaluation cases.
+### Verbose but Wrong
 
-The comparison reports:
+A response contains substantial explanation but reaches an incorrect conclusion.
 
-A wins
-B wins
-ties
-win rates
-final winner
-completion status
+### Terse but Correct
 
-A winner should only be declared when the comparison contains sufficient completed cases.
+A response is concise but correctly answers the question.
 
-If an experiment is incomplete, the system reports it as incomplete instead of presenting a misleading winner based on a partial sample.
+### Confidently Wrong
 
-11. Before vs After Mitigation
+A response confidently presents incorrect information.
 
-The purpose of the mitigation experiments is not simply to demonstrate that mitigation code exists.
+The judge is evaluated against expected winners.
 
-The important question is whether the measured bias decreases after mitigation while evaluation quality remains acceptable.
+The resulting artifact records:
 
-Therefore the benchmark compares baseline and mitigated results where applicable.
+```text
+Expected winner
+Judge winner
+Expected-winner accuracy
+Position flips
+```
 
-A mitigation should not automatically be considered successful if it reduces bias at the cost of substantially reducing evaluation accuracy.
+These cases are designed to expose whether the judge is influenced by length, confidence, or presentation.
 
-12. Auditability
+---
 
-JudgeBench records evaluation information so that results can be inspected and reproduced.
+# 13. Bias Before vs After Mitigation
 
-Depending on the evaluation, recorded information includes:
+The purpose of mitigation experiments is not simply to demonstrate that mitigation code exists.
 
-case ID
-judge prompt
-raw judge response
-parsed verdict
-criterion scores
-rationales
-winner
-position-flip information
-token usage
-latency
-model configuration
+The important question is:
 
-This allows the evaluation process to be audited instead of treating the final score as an unexplained number.
+> Does measured bias decrease after mitigation without unacceptable loss of evaluation accuracy?
 
-13. Limitations
+Therefore, where applicable, JudgeBench compares baseline and mitigated experiments.
 
-JudgeBench has several limitations.
+A successful mitigation should ideally demonstrate:
 
-First, the quality of human/gold validation depends on the size and quality of the human-labeled set.
+```text
+Bias ↓
+while
+Accuracy remains acceptable
+```
 
-Second, a small validation sample cannot establish universal judge reliability.
+A mitigation that reduces bias but substantially damages correctness would not necessarily be an improvement.
 
-Third, adversarial probes only test the behaviors represented by the benchmark cases.
+---
 
-Fourth, self-enhancement requires controlled cross-model experiments for strong empirical conclusions.
+# 14. Experimental Evidence
 
-Fifth, pairwise judging provides an alternative to absolute pointwise scoring for score-clustering concerns, but does not constitute a complete statistical calibration study.
+JudgeBench produces multiple evidence artifacts.
 
-Finally, LLM judge results can vary because of model behavior, stochasticity, API availability, and experimental conditions.
+Important examples include:
 
-14. Release-Gating Recommendation
+```text
+result/
+├── adversarial_cases.json
+├── adversarial_position_bias.json
+├── bias_validation_summary.json
+├── final_scorecard.json
+├── judge_validation.json
+├── qa_001.json
+├── qa_001_pairwise.json
+├── verbosity_bias.json
+├── verbosity_comparison.json
+└── verbosity_report.json
+```
 
-JudgeBench should not be used as the sole release gate for high-impact production changes.
+These artifacts are intended to make the evaluation results inspectable and reproducible.
 
-A safer evaluation process is:
+---
 
-Automated Tests
+# 15. Automated Testing
+
+The project contains an automated test suite covering the core evaluation pipeline.
+
+The reported development run contains:
+
+```text
+66 passed
+```
+
+The tests cover areas including:
+
+* Dataset validation
+* Model configuration
+* Prompt generation
+* Structured parsing
+* Rubric validation
+* Pointwise judging
+* Pairwise judging
+* Bias validation
+* Adversarial evaluation
+* Verbosity mitigation
+* Verbosity reporting
+* Human/gold validation
+* Test-retest logic
+* A/B comparison
+* Experiment integrity
+* Benchmark quality
+
+Passing automated tests demonstrates software correctness for the tested behaviors.
+
+It does **not** demonstrate that the underlying LLM judge is unbiased or always correct.
+
+---
+
+# 16. Limitations
+
+JudgeBench has several important limitations.
+
+## Limited Human/Gold Coverage
+
+Human validation is dependent on the available human-labeled cases.
+
+A small or imbalanced validation set cannot establish universal judge reliability.
+
+## Single-Class Gold Labels
+
+The current human/gold validation labels contain only one expected-winner class.
+
+This limits the usefulness of Cohen's kappa and means agreement results must be interpreted cautiously.
+
+## Adversarial Coverage
+
+The adversarial suite only tests behaviors represented by its cases.
+
+Passing the current probes does not guarantee robustness against unseen attacks or failure modes.
+
+## Self-Enhancement Evidence
+
+The architecture supports independent judge and generator configuration, but a controlled cross-model experiment is required before making a strong empirical claim about self-enhancement reduction.
+
+## Score Calibration
+
+Pairwise evaluation provides an alternative to absolute pointwise scoring, but it is not equivalent to a complete statistical calibration study.
+
+## Model Variability
+
+LLM responses can vary because of:
+
+* Model changes
+* API changes
+* Temperature
+* Provider behavior
+* Stochasticity
+* Prompt changes
+
+Therefore results should be interpreted within the configuration under which they were produced.
+
+---
+
+# 17. Would I Let This Judge Gate a Release?
+
+## Short answer
+
+**Not by itself.**
+
+JudgeBench provides useful evidence, but an LLM judge should not automatically become the sole release gate for high-impact changes.
+
+A safer process is:
+
+```text
+                ┌──────────────────────┐
+                │   Automated Tests    │
+                └──────────┬───────────┘
+                           │
+                           ▼
+                ┌──────────────────────┐
+                │      LLM Judge       │
+                └──────────┬───────────┘
+                           │
+                           ▼
+                ┌──────────────────────┐
+                │ Adversarial Testing  │
+                └──────────┬───────────┘
+                           │
+                           ▼
+                ┌──────────────────────┐
+                │   Bias Validation    │
+                └──────────┬───────────┘
+                           │
+                           ▼
+                ┌──────────────────────┐
+                │ Human Review         │
+                │ for High-Risk Cases  │
+                └──────────────────────┘
+```
+
+For low-risk changes, an LLM judge can be a valuable automated evaluation signal.
+
+For high-risk changes, the judge should remain one component of the release decision.
+
+---
+
+# 18. Release-Gating Criteria
+
+Before allowing an LLM judge to gate a release automatically, I would require evidence for:
+
+* Stable test-retest behavior
+* Low position-flip rate
+* Acceptable adversarial accuracy
+* Meaningful human/gold agreement
+* Sufficiently diverse validation data
+* Controlled cross-model evaluation where self-enhancement is a concern
+* No major degradation after bias mitigation
+
+The exact thresholds should depend on the risk of the system being evaluated.
+
+A benchmark should not invent universal thresholds without sufficient evidence.
+
+---
+
+# 19. Final Assessment
+
+JudgeBench demonstrates an important principle:
+
+> **The evaluator must itself be evaluated.**
+
+An LLM judge can provide significant scalability for model evaluation, but its output should be treated as evidence rather than unquestionable ground truth.
+
+JudgeBench therefore combines:
+
+```text
+Structured Judging
        +
-LLM Judge
+Explicit Rubrics
        +
-Adversarial Evaluation
+Pairwise Comparison
        +
-Bias Validation
+Bias Detection
        +
-Human Review for High-Impact Changes
+Adversarial Probes
+       +
+Human / Gold Validation
+       +
+Test-Retest Validation
+       +
+Auditability
+```
 
-For lower-risk changes, an LLM judge can provide a useful automated evaluation signal.
+The resulting system provides a more responsible approach to LLM-based evaluation than simply asking a model for a score and trusting the result.
 
-For high-risk changes, the judge should remain one component of the decision rather than the only approval mechanism.
+---
 
-The fundamental reason is that the judge is itself a model and can therefore introduce systematic errors.
+# 20. Conclusion
 
-15. Conclusion
+JudgeBench is not designed to prove that an LLM judge is unbiased.
 
-JudgeBench is built around the principle that an evaluation system must itself be evaluated.
+It is designed to **measure where the judge is reliable, where it is vulnerable, and what additional evidence is required before trusting its decisions**.
 
-The project therefore measures not only candidate quality, but also properties of the evaluator such as:
+The project therefore evaluates two things simultaneously:
 
-ordering sensitivity
-verbosity sensitivity
-adversarial robustness
-agreement with available gold labels
-test-retest consistency
+```text
+Candidate Quality
+        +
+Evaluator Reliability
+```
 
-The benchmark does not assume that an LLM judge is ground truth.
+That distinction is the central design principle of the project.
 
-Instead, it provides measurable evidence about where the judge is reliable, where it is vulnerable, and where additional human or independent validation is required.
+---
+
+# Author
+
+**Bhumi Jain**
+
+B.Tech — Artificial Intelligence & Data Science
+
+**Project:** JudgeBench — LLM-as-Judge Evaluation Pipeline
+
+---
+
+<p align="center">
+
+**Built with Python • LLM Evaluation • Bias Analysis • Structured Judging**
+
+</p>
+```
+
+### One thing I would change from the previous version
+
+Don't put **“66 Tests Passed”** into `DISCUSSION.md` as if it were experimental validation of the judge. It's only evidence that the **software tests passed**. Your discussion now explicitly makes that distinction, which is much stronger academically and avoids overstating your results.
