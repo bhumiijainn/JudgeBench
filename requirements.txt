@@ -1,0 +1,8 @@
+openai
+pydantic
+python-dotenv
+PyYAML
+pandas
+scikit-learn
+pytest
+tenacity
