@@ -18,15 +18,9 @@ htmlcov/
 .vscode/
 .idea/
 
-# Generated results
-results/*.json
-results/*.jsonl
-results/*.md
-
 # Logs
-logs/*.json
-logs/*.jsonl
-logs/*.log
+logs/
+*.log
 
 # OS
 .DS_Store

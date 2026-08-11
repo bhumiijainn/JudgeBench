@@ -1,0 +1,25 @@
+{
+  "benchmark": "JudgeBench",
+  "validation_type": "human_gold_agreement",
+  "source": {
+    "human_labels": "data\\human_labels.yaml",
+    "judge_results": "result"
+  },
+  "metrics": {
+    "human_label_cases": 15,
+    "judge_result_cases": 1,
+    "comparable_cases": 1,
+    "agreed_cases": 1,
+    "disagreed_cases": 0,
+    "agreement_rate": 1.0,
+    "agreement_percent": 100.0,
+    "cohen_kappa": null,
+    "cohen_kappa_reason": "Cohen's kappa is unavailable because the human/gold labels contain only one class.",
+    "agreed_case_ids": [
+      "qa_001"
+    ],
+    "disagreed_case_ids": [],
+    "complete": false
+  },
+  "status": "INCOMPLETE"
+}

@@ -1,0 +1,20 @@
+{
+  "case_id": "qa_001",
+  "category": "factual",
+  "difficulty": "easy",
+  "input": "What is the capital of France?",
+  "system_prompt": "Answer factual questions accurately and concisely.",
+  "candidate_a": "Paris.",
+  "candidate_b": "The capital of France is Paris, located in Western Europe.",
+  "first_order_winner": "A",
+  "second_order_winner": "A",
+  "final_winner": "A",
+  "position_flip": false,
+  "first_order_reason": "Response A strictly follows the system instruction to answer accurately and concisely by providing the direct answer. Response B adds unrequested extra details.",
+  "second_order_reason": "Response A directly answers the question with maximum conciseness, perfectly adhering to the system instruction to answer accurately and concisely. Response B includes unprompted extra information.",
+  "metrics": {
+    "input_tokens": 742,
+    "output_tokens": 288,
+    "latency_ms": 7637.084899999536
+  }
+}

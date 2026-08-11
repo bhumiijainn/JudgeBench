@@ -1,0 +1,11 @@
+{
+  "experiment": "verbosity_mitigation",
+  "comparable_cases": 0,
+  "winner_changes": 0,
+  "winner_change_rate": 0.0,
+  "baseline_position_flips": 0,
+  "baseline_position_flip_rate": 0.0,
+  "mitigated_position_flips": 0,
+  "mitigated_position_flip_rate": 0.0,
+  "comparisons": []
+}

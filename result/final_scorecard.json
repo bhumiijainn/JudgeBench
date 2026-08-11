@@ -1,0 +1,28 @@
+{
+  "benchmark": "JudgeBench",
+  "status": "INCOMPLETE",
+  "adversarial": {
+    "completed_cases": 3,
+    "expected_cases": 10,
+    "position_flips": 0,
+    "position_flip_rate": 0.0,
+    "expected_winner_accuracy": 0.6666666666666666,
+    "complete": false
+  },
+  "verbosity": {
+    "baseline_completed": 0,
+    "mitigated_completed": 0,
+    "comparable_cases": 0,
+    "matching_case_sets": true,
+    "baseline_position_flip_rate": 0.0,
+    "mitigated_position_flip_rate": 0.0,
+    "position_bias_change": 0.0,
+    "baseline_expected_winner_accuracy": 0.0,
+    "mitigated_expected_winner_accuracy": 0.0,
+    "accuracy_change": 0.0,
+    "complete": false
+  },
+  "summary": {
+    "interpretation": "Experiment incomplete \u2014 insufficient comparable verbosity cases for interpretation."
+  }
+}

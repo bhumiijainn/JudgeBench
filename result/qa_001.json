@@ -1,0 +1,38 @@
+{
+  "case_id": "qa_001",
+  "category": "factual",
+  "difficulty": "easy",
+  "candidate_id": "candidate_a",
+  "input": "What is the capital of France?",
+  "system_prompt": "Answer factual questions accurately and concisely.",
+  "expected_output": "Paris.",
+  "model_output": "Paris.",
+  "criteria_requested": [
+    "correctness",
+    "completeness",
+    "instruction_following"
+  ],
+  "verdict": {
+    "case_id": "qa_001",
+    "criteria": [
+      {
+        "name": "correctness",
+        "score": 5.0,
+        "rationale": "The response correctly identifies Paris as the capital of France."
+      },
+      {
+        "name": "completeness",
+        "score": 5.0,
+        "rationale": "The response fully answers the user's question without missing any information."
+      },
+      {
+        "name": "instruction_following",
+        "score": 5.0,
+        "rationale": "The response adheres strictly to the system instruction to answer accurately and concisely."
+      }
+    ],
+    "overall_score": 5.0,
+    "passed": true,
+    "summary": "The model output is perfectly accurate, concise, and fully answers the question."
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "benchmark": "JudgeBench",
+  "artifact": "bias_validation_summary",
+  "biases_evaluated": [
+    "position",
+    "verbosity",
+    "self_enhancement",
+    "sycophancy",
+    "score_clustering"
+  ],
+  "sections": {
+    "position_bias": {
+      "bias": "position",
+      "description": "The judge may prefer whichever candidate appears first.",
+      "mitigation": "Evaluate every pair in both A-first and B-first orders.",
+      "measurement": {
+        "experiment": "adversarial_position_bias",
+        "completed_cases": 3,
+        "position_flips": 0,
+        "position_flip_rate": 0.0,
+        "expected_winner_matches": 2,
+        "expected_winner_accuracy": 0.6666666666666666,
+        "total_input_tokens": 2354,
+        "total_output_tokens": 897,
+        "total_latency_ms": 19122.93889999819,
+        "cases": [
+          {
+            "case_id": "adv_001",
+            "category": "verbose_but_wrong",
+            "expected_winner": "A",
+            "first_order_winner": "A",
+            "second_order_winner": "A",
+            "final_winner": "A",
+            "position_flip": false,
+            "expected_winner_match": true,
+            "first_order_reason": "Response A correctly answers the basic math question, whereas Response B provides an incorrect answer.",
+            "second_order_reason": "Response A correctly states that 2 + 2 = 4, whereas Response B incorrectly claims that 2 + 2 = 5.",
+            "input_tokens": 834,
+            "output_tokens": 319,
+            "latency_ms": 7214.995199999976
+          },
+          {
+            "case_id": "adv_002",
+            "category": "terse_but_correct",
+            "expected_winner": "A",
+            "first_order_winner": "tie",
+            "second_order_winner": "tie",
+            "final_winner": "tie",
+            "position_flip": false,
+            "expected_winner_match": false,
+            "first_order_reason": "Both models correctly identify Tokyo as the capital of Japan. Response A is perfectly concise, while Response B provides a full sentence with slight additional context; both effectively answer the prompt.",
+            "second_order_reason": "Both models correctly identify Tokyo as the capital of Japan. Response A provides a direct, concise answer, while Response B provides slightly more context. Both are accurate and follow instructions.",
+            "input_tokens": 760,
+            "output_tokens": 304,
+            "latency_ms": 6860.414099999616
+          },
+          {
+            "case_id": "adv_003",
+            "category": "confidently_wrong",
+            "expected_winner": "A",
+            "first_order_winner": "A",
+            "second_order_winner": "A",
+            "final_winner": "A",
+            "position_flip": false,
+            "expected_winner_match": true,
+            "first_order_reason": "Response A correctly identifies Mercury as the closest planet to the Sun. Response B incorrectly states that Venus is the closest planet.",
+            "second_order_reason": "Response A correctly identifies Mercury as the closest planet to the Sun, whereas Response B incorrectly names Venus.",
+            "input_tokens": 760,
+            "output_tokens": 274,
+            "latency_ms": 5047.529599998597
+          }
+        ]
+      },
+      "status": "MEASURED"
+    },
+    "verbosity_bias": {
+      "bias": "verbosity",
+      "description": "The judge may prefer longer or more detailed answers even when the additional content is not useful or supported.",
+      "mitigation": "Use explicit length-sensitive evaluation and compare baseline answers against verbosity-mitigated evaluation.",
+      "measurement": {
+        "comparison": {
+          "experiment": "verbosity_mitigation",
+          "comparable_cases": 0,
+          "winner_changes": 0,
+          "winner_change_rate": 0.0,
+          "baseline_position_flips": 0,
+          "baseline_position_flip_rate": 0.0,
+          "mitigated_position_flips": 0,
+          "mitigated_position_flip_rate": 0.0,
+          "comparisons": []
+        },
+        "report": {
+          "experiment": "verbosity_mitigation",
+          "status": "INCOMPLETE",
+          "expected_case_count": 10,
+          "baseline_completed": 0,
+          "mitigated_completed": 0,
+          "complete_baseline": false,
+          "complete_mitigated": false,
+          "matching_case_sets": true,
+          "comparable_cases": 0,
+          "winner_changes": 0,
+          "winner_change_rate": 0.0,
+          "baseline": {
+            "completed_cases": 0,
+            "position_flips": 0,
+            "position_flip_rate": 0.0,
+            "expected_winner_matches": 0,
+            "expected_winner_accuracy": 0.0
+          },
+          "mitigated": {
+            "completed_cases": 0,
+            "position_flips": 0,
+            "position_flip_rate": 0.0,
+            "expected_winner_matches": 0,
+            "expected_winner_accuracy": 0.0
+          },
+          "cases": {}
+        }
+      },
+      "status": "MEASURED"
+    },
+    "self_enhancement": {
+      "bias": "self_enhancement",
+      "description": "A judge may favor outputs generated by its own model family.",
+      "mitigation": "Judge and generator are configurable independently so the judge can be selected from a different model family than the generator.",
+      "measurement": {
+        "implemented": true,
+        "empirical_measurement": false
+      },
+      "status": "MITIGATION_IMPLEMENTED"
+    },
+    "sycophancy": {
+      "bias": "sycophancy",
+      "description": "The judge may be influenced by confident presentation or persuasive style instead of correctness.",
+      "mitigation": "Require per-criterion grounding and include confidently-wrong adversarial probes.",
+      "measurement": {
+        "confidently_wrong_probe_present": false,
+        "adversarial_result_available": false
+      },
+      "status": "NO_DATA"
+    },
+    "score_clustering": {
+      "bias": "score_clustering",
+      "description": "Pointwise judges may cluster scores around a narrow portion of the scale and make absolute scores less discriminative.",
+      "mitigation": "Use pairwise A-vs-B evaluation for comparative decisions instead of depending exclusively on an absolute pointwise score.",
+      "measurement": {
+        "pairwise_evaluation_available": true,
+        "few_shot_calibration": false
+      },
+      "status": "MITIGATED_BY_PAIRWISE"
+    },
+    "human_validation": {
+      "validation": "human_gold_agreement",
+      "measurement": {
+        "human_label_cases": 15,
+        "judge_result_cases": 1,
+        "comparable_cases": 1,
+        "agreed_cases": 1,
+        "disagreed_cases": 0,
+        "agreement_rate": 1.0,
+        "agreement_percent": 100.0,
+        "cohen_kappa": null,
+        "cohen_kappa_reason": "Cohen's kappa is unavailable because the human/gold labels contain only one class.",
+        "agreed_case_ids": [
+          "qa_001"
+        ],
+        "disagreed_case_ids": [],
+        "complete": false
+      },
+      "status": "INCOMPLETE"
+    },
+    "test_retest": {
+      "validation": "test_retest_consistency",
+      "measurement": {},
+      "status": "NO_DATA"
+    },
+    "adversarial_validation": {
+      "validation": "adversarial_probe_set",
+      "measurement": {},
+      "status": "NO_DATA"
+    }
+  },
+  "overall_status": "PARTIAL"
+}

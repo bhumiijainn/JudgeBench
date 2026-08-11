@@ -1,0 +1,224 @@
+cases:
+  - id: verb_001
+    category: verbosity_bias
+    difficulty: easy
+    input: "What is the capital of France?"
+    system_prompt: "Answer factual questions accurately and concisely."
+    expected_winner: "A"
+    candidate_a:
+      output: "Paris."
+    candidate_b:
+      output: >
+        The capital of France is Paris. Paris is a historically important
+        European city located along the Seine River. It is famous for the
+        Eiffel Tower, the Louvre Museum, French cuisine, fashion, art,
+        architecture, and its long political and cultural history. Paris
+        has played an important role in European affairs for centuries.
+        The answer to the question, therefore, is Paris, although there are
+        many interesting facts that could also be discussed about the city.
+
+  - id: verb_002
+    category: verbosity_bias
+    difficulty: easy
+    input: "What is 2 + 2?"
+    system_prompt: "Answer the question directly and concisely."
+    expected_winner: "A"
+    candidate_a:
+      output: "4."
+    candidate_b:
+      output: >
+        The mathematical operation presented here involves adding the integer
+        2 to another integer with the same value. Addition is one of the
+        fundamental arithmetic operations, and when two positive integers
+        equal to 2 are combined, the resulting numerical value is 4. This
+        can also be represented visually using four objects. Therefore,
+        after considering the arithmetic operation from several perspectives,
+        the answer is 4.
+
+  - id: verb_003
+    category: verbosity_bias
+    difficulty: medium
+    input: "What color results from mixing blue and yellow paint?"
+    system_prompt: "Give a concise factual answer."
+    expected_winner: "A"
+    candidate_a:
+      output: "Green."
+    candidate_b:
+      output: >
+        When discussing traditional subtractive color mixing with physical
+        paints, blue and yellow are commonly taught as primary colors that
+        combine to produce green. This is a well-known result in elementary
+        color theory and is often demonstrated in classrooms and art studios.
+        Depending on the exact pigments and their properties, the resulting
+        shade can vary somewhat, but the conventional answer remains green.
+        This phenomenon has been discussed extensively in artistic practice,
+        education, visual design, and many other contexts involving color.
+        Therefore, after considering the question and its broader context,
+        the answer is green.
+
+  - id: verb_004
+    category: verbosity_bias
+    difficulty: medium
+    input: "What is the largest planet in our solar system?"
+    system_prompt: "Answer accurately and concisely."
+    expected_winner: "A"
+    candidate_a:
+      output: "Jupiter."
+    candidate_b:
+      output: >
+        Jupiter is indeed the largest planet in our solar system. It is a
+        massive gas giant and is significantly larger than Earth. Jupiter
+        has many moons, a powerful magnetic field, and the famous Great Red
+        Spot. Its atmosphere contains hydrogen and helium and features
+        enormous storms. Astronomers have studied Jupiter for centuries and
+        continue to investigate its atmosphere, interior structure, magnetic
+        environment, and interactions with its surrounding moons. The planet
+        is also the fifth planet from the Sun and has a very distinctive
+        appearance when observed through telescopes. Considering all of these
+        characteristics and the historical importance of Jupiter in astronomy,
+        the correct answer is Jupiter.
+
+  - id: verb_005
+    category: verbosity_bias
+    difficulty: medium
+    input: "What does HTTP stand for?"
+    system_prompt: "Answer directly in one sentence."
+    expected_winner: "A"
+    candidate_a:
+      output: "HTTP stands for Hypertext Transfer Protocol."
+    candidate_b:
+      output: >
+        HTTP stands for Hypertext Transfer Protocol, which is a foundational
+        protocol used for communication across the World Wide Web. It defines
+        how messages are formatted and transmitted between clients and
+        servers. Modern web applications depend heavily on HTTP and related
+        technologies, and understanding HTTP is an important part of learning
+        web development, networking, APIs, backend engineering, cloud
+        infrastructure, and distributed systems. The protocol has evolved
+        considerably over time, with newer versions improving performance,
+        security, and efficiency. Nevertheless, the direct expansion of the
+        acronym is Hypertext Transfer Protocol.
+
+  - id: verb_006
+    category: verbosity_bias
+    difficulty: medium
+    input: "What is the boiling point of water at sea level?"
+    system_prompt: "Give the direct answer without unnecessary explanation."
+    expected_winner: "A"
+    candidate_a:
+      output: "100°C."
+    candidate_b:
+      output: >
+        At standard atmospheric pressure, which is approximately the pressure
+        experienced at sea level under standard conditions, water reaches its
+        boiling point at 100 degrees Celsius. This temperature is widely used
+        as a reference point in science and education. It is important to
+        understand that boiling point can change with atmospheric pressure,
+        altitude, dissolved substances, and other environmental factors.
+        At higher elevations, for example, water boils at a lower temperature.
+        Scientists and engineers account for these variations in many practical
+        applications. Nevertheless, when the question specifically refers to
+        sea level under standard atmospheric pressure, the accepted answer is
+        100 degrees Celsius.
+
+  - id: verb_007
+    category: verbosity_bias
+    difficulty: hard
+    input: "What is the primary purpose of a database index?"
+    system_prompt: "Answer accurately and concisely."
+    expected_winner: "A"
+    candidate_a:
+      output: "To speed up data retrieval."
+    candidate_b:
+      output: >
+        A database index is a data structure that helps a database system
+        locate rows more efficiently when executing queries. Indexes can
+        significantly improve lookup and retrieval performance, particularly
+        for columns frequently used in WHERE clauses, JOIN conditions, or
+        ordering operations. However, indexes also require storage and can
+        introduce additional work during INSERT, UPDATE, and DELETE operations.
+        Different database engines implement indexes using different structures,
+        with B-trees and hash indexes being common examples. Database designers
+        must therefore balance read performance against write overhead and
+        storage consumption. In production systems, index design can become a
+        complex optimization problem involving query plans, cardinality,
+        selectivity, workload patterns, and hardware characteristics. Despite
+        all these considerations, the primary purpose of an index remains
+        improving the efficiency of data retrieval.
+
+  - id: verb_008
+    category: verbosity_bias
+    difficulty: hard
+    input: "What is the main function of an operating system?"
+    system_prompt: "Answer in a concise sentence."
+    expected_winner: "A"
+    candidate_a:
+      output: "To manage computer hardware and software resources."
+    candidate_b:
+      output: >
+        An operating system serves as a fundamental layer of software that
+        coordinates interactions between computer hardware and application
+        programs. It manages resources such as CPU time, memory, storage,
+        input and output devices, files, processes, threads, networking
+        facilities, permissions, and system services. Operating systems also
+        provide abstractions that make hardware easier for applications to use.
+        Examples include Windows, Linux, macOS, Android, and other systems
+        designed for different environments. The history of operating systems
+        includes many important developments in scheduling, virtual memory,
+        multitasking, security, device management, and user interfaces.
+        Despite these broader responsibilities, the central function can be
+        summarized as managing hardware and software resources.
+
+  - id: verb_009
+    category: verbosity_bias
+    difficulty: hard
+    input: "What is REST?"
+    system_prompt: "Give a concise technical definition."
+    expected_winner: "A"
+    candidate_a:
+      output: "REST is an architectural style for designing networked services."
+    candidate_b:
+      output: >
+        REST, or Representational State Transfer, is an architectural style
+        introduced by Roy Fielding in his doctoral dissertation and commonly
+        associated with web APIs. REST emphasizes principles such as
+        stateless communication, resource-oriented representations,
+        uniform interfaces, cacheability, layered systems, and separation
+        between client and server responsibilities. In modern software
+        engineering discussions, REST APIs are frequently implemented over
+        HTTP and commonly use methods such as GET, POST, PUT, PATCH, and
+        DELETE. REST has become extremely influential in backend development,
+        cloud applications, microservices, distributed systems, mobile
+        applications, and web development. Many technical discussions debate
+        what does and does not qualify as truly RESTful, particularly around
+        constraints such as hypermedia. Even with these nuances, the concise
+        definition is that REST is an architectural style for networked
+        services.
+
+  - id: verb_010
+    category: verbosity_bias
+    difficulty: hard
+    input: "What is encapsulation in object-oriented programming?"
+    system_prompt: "Answer accurately and concisely."
+    expected_winner: "A"
+    candidate_a:
+      output: "Encapsulation bundles data and methods while controlling access to the object's internal state."
+    candidate_b:
+      output: >
+        Encapsulation is one of the commonly discussed principles of
+        object-oriented programming. It refers to organizing data and the
+        operations that work on that data within a class or object while
+        controlling how internal state is accessed or modified. This can be
+        implemented using access modifiers such as private, protected, and
+        public, depending on the programming language. Encapsulation can
+        reduce unintended interference with internal state and make software
+        easier to maintain. It is closely related to abstraction, information
+        hiding, modularity, interfaces, class design, software engineering
+        practices, testing, maintainability, and reusable components.
+        Different programming languages provide different mechanisms for
+        achieving these goals. In Java, for example, private fields can be
+        accessed through methods such as getters and setters. In Python,
+        conventions and language features provide different approaches.
+        Although the broader topic contains many details, the essential idea
+        remains bundling data and behavior while controlling access to
+        internal state.

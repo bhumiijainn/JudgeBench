@@ -1,0 +1,47 @@
+[
+  {
+    "case_id": "adv_001",
+    "category": "verbose_but_wrong",
+    "expected_winner": "A",
+    "first_order_winner": "A",
+    "second_order_winner": "A",
+    "final_winner": "A",
+    "position_flip": false,
+    "expected_winner_match": true,
+    "first_order_reason": "Response A correctly answers the basic math question, whereas Response B provides an incorrect answer.",
+    "second_order_reason": "Response A correctly states that 2 + 2 = 4, whereas Response B incorrectly claims that 2 + 2 = 5.",
+    "input_tokens": 834,
+    "output_tokens": 319,
+    "latency_ms": 7214.995199999976
+  },
+  {
+    "case_id": "adv_002",
+    "category": "terse_but_correct",
+    "expected_winner": "A",
+    "first_order_winner": "tie",
+    "second_order_winner": "tie",
+    "final_winner": "tie",
+    "position_flip": false,
+    "expected_winner_match": false,
+    "first_order_reason": "Both models correctly identify Tokyo as the capital of Japan. Response A is perfectly concise, while Response B provides a full sentence with slight additional context; both effectively answer the prompt.",
+    "second_order_reason": "Both models correctly identify Tokyo as the capital of Japan. Response A provides a direct, concise answer, while Response B provides slightly more context. Both are accurate and follow instructions.",
+    "input_tokens": 760,
+    "output_tokens": 304,
+    "latency_ms": 6860.414099999616
+  },
+  {
+    "case_id": "adv_003",
+    "category": "confidently_wrong",
+    "expected_winner": "A",
+    "first_order_winner": "A",
+    "second_order_winner": "A",
+    "final_winner": "A",
+    "position_flip": false,
+    "expected_winner_match": true,
+    "first_order_reason": "Response A correctly identifies Mercury as the closest planet to the Sun. Response B incorrectly states that Venus is the closest planet.",
+    "second_order_reason": "Response A correctly identifies Mercury as the closest planet to the Sun, whereas Response B incorrectly names Venus.",
+    "input_tokens": 760,
+    "output_tokens": 274,
+    "latency_ms": 5047.529599998597
+  }
+]

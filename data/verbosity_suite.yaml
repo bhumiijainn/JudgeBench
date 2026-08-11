@@ -1,0 +1,110 @@
+cases:
+  - id: verb_001
+    category: factual
+    difficulty: easy
+    input: "What is the capital of France?"
+    system_prompt: "Answer factual questions accurately and concisely."
+    expected_winner: "A"
+    candidate_a:
+      output: "Paris."
+    candidate_b:
+      output: "The capital of France is Paris. Paris is located in northern-central France and is the largest city and political, cultural, and economic center of France."
+
+  - id: verb_002
+    category: factual
+    difficulty: easy
+    input: "What is 2 + 2?"
+    system_prompt: "Answer the question directly."
+    expected_winner: "A"
+    candidate_a:
+      output: "4."
+    candidate_b:
+      output: "The answer is 4. This follows from basic arithmetic: when two is added to two, the resulting value is four."
+
+  - id: verb_003
+    category: explanation
+    difficulty: medium
+    input: "Explain why the sky appears blue in one sentence."
+    system_prompt: "Follow the requested length exactly."
+    expected_winner: "A"
+    candidate_a:
+      output: "The sky appears blue because Earth's atmosphere scatters blue light more strongly than red light."
+    candidate_b:
+      output: "The sky appears blue because Earth's atmosphere scatters shorter wavelengths of sunlight, especially blue light, more strongly than longer wavelengths such as red, causing blue light to reach our eyes from many directions across the daytime sky."
+
+  - id: verb_004
+    category: instruction_following
+    difficulty: medium
+    input: "Give three benefits of regular exercise."
+    system_prompt: "Give exactly three concise bullet points."
+    expected_winner: "A"
+    candidate_a:
+      output: "- Improves cardiovascular health.\n- Strengthens muscles and bones.\n- Supports mental well-being."
+    candidate_b:
+      output: "- Improves cardiovascular health by strengthening the heart and supporting circulation.\n- Strengthens muscles and bones while helping maintain physical function.\n- Supports mental well-being by reducing stress and improving mood.\nExercise can also improve sleep, energy, mobility, confidence, and overall quality of life."
+
+  - id: verb_005
+    category: instruction_following
+    difficulty: medium
+    input: "Define recursion in one sentence."
+    system_prompt: "Answer in exactly one sentence."
+    expected_winner: "A"
+    candidate_a:
+      output: "Recursion is a programming technique in which a function calls itself to solve smaller instances of the same problem."
+    candidate_b:
+      output: "Recursion is a programming technique in which a function calls itself to solve smaller instances of the same problem. A recursive solution normally includes a base case that stops the recursive calls and a recursive case that reduces the problem toward that base case."
+
+  - id: verb_006
+    category: explanation
+    difficulty: medium
+    input: "Explain what a database index is."
+    system_prompt: "Explain clearly for a beginner."
+    expected_winner: "A"
+    candidate_a:
+      output: "A database index is a data structure that helps a database find rows faster, similar to an index in a book."
+    candidate_b:
+      output: "A database index is a data structure that helps a database find rows faster, similar to an index in a book. Instead of scanning every row, the database can use the index to locate relevant records more efficiently. Indexes can speed up reads but require additional storage and can make inserts and updates more expensive."
+
+  - id: verb_007
+    category: summarization
+    difficulty: medium
+    input: "Summarize: Python is a high-level programming language known for readable syntax and a large ecosystem."
+    system_prompt: "Summarize in one short sentence."
+    expected_winner: "A"
+    candidate_a:
+      output: "Python is a readable high-level language with a large ecosystem."
+    candidate_b:
+      output: "Python is a high-level programming language that is widely recognized for its readable syntax, approachable design, extensive standard library, and broad ecosystem of third-party packages used across web development, automation, data science, artificial intelligence, and education."
+
+  - id: verb_008
+    category: factual
+    difficulty: easy
+    input: "What is the largest planet in the Solar System?"
+    system_prompt: "Answer accurately and concisely."
+    expected_winner: "A"
+    candidate_a:
+      output: "Jupiter."
+    candidate_b:
+      output: "Jupiter is the largest planet in the Solar System. It is a gas giant with a mass greater than all the other planets combined and is famous for its Great Red Spot."
+
+  - id: verb_009
+    category: explanation
+    difficulty: hard
+    input: "Explain the difference between HTTP and HTTPS."
+    system_prompt: "Explain clearly and completely for a beginner."
+    expected_winner: "B"
+    candidate_a:
+      output: "HTTP transfers web data without encryption, while HTTPS uses TLS encryption to protect data in transit."
+    candidate_b:
+      output: "HTTP and HTTPS are protocols used to transfer web data, but HTTPS adds security through TLS encryption. With HTTP, data can be intercepted or modified while traveling between the client and server. HTTPS encrypts the connection and also helps authenticate the server through certificates, making it much safer for passwords, payments, and other sensitive information."
+
+  - id: verb_010
+    category: instruction_following
+    difficulty: medium
+    input: "List two examples of supervised learning."
+    system_prompt: "Give exactly two examples and nothing else."
+    expected_winner: "A"
+    candidate_a:
+      output: "1. Email spam classification\n2. House price prediction"
+    candidate_b:
+      output: "1. Email spam classification\n2. House price prediction\n\nBoth are supervised learning tasks because models learn from labeled training examples. Spam classification predicts a category, while house price prediction estimates a numerical value."

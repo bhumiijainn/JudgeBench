@@ -1,0 +1,23 @@
+{
+  "benchmark": "JudgeBench",
+  "comparison_type": "pairwise_ab",
+  "comparison": {
+    "configuration_a": "Candidate A",
+    "configuration_b": "Candidate B",
+    "comparable_cases": 1,
+    "expected_cases": 30,
+    "a_wins": 1,
+    "b_wins": 0,
+    "ties": 0,
+    "a_win_rate": 1.0,
+    "b_win_rate": 0.0,
+    "winner": null,
+    "status": "INCOMPLETE"
+  },
+  "cases": {
+    "qa_001": {
+      "final_winner": "A",
+      "position_flip": false
+    }
+  }
+}

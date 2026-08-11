@@ -1,0 +1,14 @@
+{
+  "experiment": "verbosity_bias",
+  "completed_cases": 0,
+  "verbosity_bias_cases": 0,
+  "verbosity_bias_rate": 0.0,
+  "expected_winner_matches": 0,
+  "expected_winner_accuracy": 0.0,
+  "position_flips": 0,
+  "position_flip_rate": 0.0,
+  "total_input_tokens": 0,
+  "total_output_tokens": 0,
+  "total_latency_ms": 0,
+  "cases": []
+}

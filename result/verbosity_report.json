@@ -1,0 +1,28 @@
+{
+  "experiment": "verbosity_mitigation",
+  "status": "INCOMPLETE",
+  "expected_case_count": 10,
+  "baseline_completed": 0,
+  "mitigated_completed": 0,
+  "complete_baseline": false,
+  "complete_mitigated": false,
+  "matching_case_sets": true,
+  "comparable_cases": 0,
+  "winner_changes": 0,
+  "winner_change_rate": 0.0,
+  "baseline": {
+    "completed_cases": 0,
+    "position_flips": 0,
+    "position_flip_rate": 0.0,
+    "expected_winner_matches": 0,
+    "expected_winner_accuracy": 0.0
+  },
+  "mitigated": {
+    "completed_cases": 0,
+    "position_flips": 0,
+    "position_flip_rate": 0.0,
+    "expected_winner_matches": 0,
+    "expected_winner_accuracy": 0.0
+  },
+  "cases": {}
+}
