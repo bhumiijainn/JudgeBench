@@ -856,4 +856,3 @@ JudgeBench — LLM-as-Judge Evaluation Pipeline
 
 ⭐ **If you find this project useful, consider starring the repository.**
 
-If it is, keep the badge and text. If the final count differs, change **both** occurrences to the real count.
